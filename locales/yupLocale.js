@@ -1,8 +1,9 @@
 export default {
   string: {
-    url: () => ({ key: 'Ссылка должна быть валидным URL' }),
+    url: () => ({ key: 'url' }),
   },
   mixed: {
-    notOneOf: () => ({ key: 'RSS уже существует' }),
+    required: () => ({ key: 'required' }),
+    notOneOf: () => ({ key: 'notOneOf' }),
   },
 };
