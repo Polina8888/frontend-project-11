@@ -9,8 +9,10 @@ export default {
     closeModalBtn: 'Закрыть',
     addBtn: 'Добавить',
     successfullyLoaded: 'RSS был успешно загружен',
-    required: 'Это обязательное поле',
-    url: 'Ссылка должна быть валидным URL',
-    notOneOf: 'RSS уже существует',
+    errors: {
+      required: 'Это обязательное поле',
+      invalid: 'Ссылка должна быть валидным URL',
+      alreadyExists: 'RSS уже существует',
+    },
   },
 };

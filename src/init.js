@@ -26,7 +26,7 @@ export default async () => {
       error: '',
     },
     urls: [],
-    language: 'en',
+    language: 'ru',
   };
 
   yup.setLocale(locale);
@@ -68,10 +68,8 @@ export default async () => {
         watchedState.urls.push(url);
       })
       .catch((err) => {
-        const message = err.errors[0].key;
-        const translatedMessage = i18nextInstance.t(message);
-        watchedState.form.error = translatedMessage;
-        // console.log(translatedMessage);
+        const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
+        watchedState.form.error = messages;
       });
   });
 };

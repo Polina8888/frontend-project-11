@@ -1,9 +1,9 @@
 export default {
   string: {
-    url: () => ({ key: 'url' }),
+    url: () => ({ key: 'invalid' }),
   },
   mixed: {
+    notOneOf: () => ({ key: 'alreadyExists' }),
     required: () => ({ key: 'required' }),
-    notOneOf: () => ({ key: 'notOneOf' }),
   },
 };
