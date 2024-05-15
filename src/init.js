@@ -3,12 +3,15 @@ import i18next from 'i18next';
 import locale from '../locales/yupLocale.js';
 import view from './watchers.js';
 import resources from '../locales/resources.js';
+import getRss from './rss.js';
 
 export default async () => {
   const elements = {
     form: document.querySelector('form'),
     input: document.querySelector('#url-input'),
     feedback: document.querySelector('.feedback'),
+    posts: document.querySelector('.posts'),
+    feeds: document.querySelector('.feeds'),
     textNodes: {
       heading: document.querySelector('h1[class="display-3 mb-0"]'),
       subheading: document.querySelector('p[class="lead"]'),
@@ -38,13 +41,9 @@ export default async () => {
     resources,
   });
 
-  const translateNodes = () => {
-    Object.entries(elements.textNodes).map(([key, value]) => {
-      value.textContent = i18nextInstance.t(key);
-    });
-  };
-
-  translateNodes();
+  Object.entries(elements.textNodes).forEach(([key, value]) => {
+    value.textContent = i18nextInstance.t(key);
+  });
 
   const watchedState = view(state, elements);
 
@@ -66,6 +65,7 @@ export default async () => {
 
         watchedState.form.error = '';
         watchedState.urls.push(url);
+        getRss(state.urls[0], state);
       })
       .catch((err) => {
         const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
