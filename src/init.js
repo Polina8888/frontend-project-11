@@ -29,6 +29,7 @@ export default async () => {
       error: '',
     },
     urls: [],
+    feed: [],
     language: 'ru',
   };
 
@@ -45,7 +46,7 @@ export default async () => {
     value.textContent = i18nextInstance.t(key);
   });
 
-  const watchedState = view(state, elements);
+  const watchedState = view(state, elements, i18nextInstance);
 
   elements.form.addEventListener('input', (e) => {
     const formData = new FormData(elements.form);
@@ -65,7 +66,7 @@ export default async () => {
 
         watchedState.form.error = '';
         watchedState.urls.push(url);
-        getRss(state.urls[0], state);
+        getRss(state.urls[0], watchedState, i18nextInstance);
       })
       .catch((err) => {
         const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));

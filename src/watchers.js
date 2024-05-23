@@ -1,6 +1,7 @@
 import onChange from 'on-change';
+import { renderFeeds } from './rss.js';
 
-export default (state, elements) => {
+export default (state, elements, i18nextInstance) => {
   const watchedState = onChange(state, (path) => {
     if (path === 'form.error') {
       if (state.form.error.length) {
@@ -14,6 +15,8 @@ export default (state, elements) => {
         elements.feedback.classList.add('text-success');
         elements.feedback.classList.remove('text-danger');
       }
+    } else if (path === 'feed') {
+      renderFeeds(watchedState, i18nextInstance, elements);
     }
   });
 
