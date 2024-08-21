@@ -7,18 +7,18 @@
 //   resources,
 // });
 
-export const parseData = (data) => {
+const parseData = (data) => {
   const parser = new DOMParser();
   const parsedData = parser.parseFromString(data.contents, 'application/xml');
   const feedDescription = parsedData.querySelector('description').textContent;
   const feedTitle = parsedData.querySelector('title').textContent;
   const items = parsedData.querySelectorAll('item');
-  const posts = Array.from(items).map((item) => ({
+  const itemsData = Array.from(items).map((item) => ({
     liTitle: item.querySelector('title').textContent,
     liDescription: item.querySelector('description').textContent,
     liLink: item.querySelector('link').textContent,
   }));
-  return { feedTitle, feedDescription, posts };
+  return { feedTitle, feedDescription, itemsData };
 };
 
 const createCard = (i18nextInstance, type) => {
@@ -46,7 +46,7 @@ export const renderFeeds = (watchedState, i18nextInstance, elements) => {
   elements.posts.append(postsCard, postsUl);
   elements.feeds.append(feedsCard, feedsUl);
 
-  watchedState.feed.forEach(({ feedTitle, feedDescription }) => {
+  watchedState.feed.forEach(({ feedTitle, feedDescription, itemsData }) => {
     const feedsLi = document.createElement('li');
     feedsLi.classList.add('list-group-item', 'border-0', 'border-end-0');
     const feedsH3 = document.createElement('h3');
@@ -57,30 +57,30 @@ export const renderFeeds = (watchedState, i18nextInstance, elements) => {
     feedsP.textContent = feedDescription;
     feedsLi.append(feedsH3, feedsP);
     feedsUl.append(feedsLi);
-  });
 
-  watchedState.posts.forEach(({ liTitle, liDescription, liLink }) => {
-    const liEl = document.createElement('li');
-    liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    itemsData.forEach(({ liTitle, liDescription, liLink }) => {
+      const liEl = document.createElement('li');
+      liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
-    const a = document.createElement('a');
-    a.classList.add('fw-bold');
-    a.setAttribute('href', liLink);
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'nooper noreferrer');
-    a.dataset.id = '16';
-    a.textContent = liTitle;
+      const a = document.createElement('a');
+      a.classList.add('fw-bold');
+      a.setAttribute('href', liLink);
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'nooper noreferrer');
+      a.dataset.id = '16';
+      a.textContent = liTitle;
 
-    const btn = document.createElement('button');
-    btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    btn.setAttribute('type', 'button');
-    btn.dataset.id = '16';
-    btn.dataset.bsToggle = 'modal';
-    btn.dataset.bsTarget = '#modal';
-    btn.textContent = i18nextInstance.t('preview');
+      const btn = document.createElement('button');
+      btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+      btn.setAttribute('type', 'button');
+      btn.dataset.id = '16';
+      btn.dataset.bsToggle = 'modal';
+      btn.dataset.bsTarget = '#modal';
+      btn.textContent = i18nextInstance.t('preview');
 
-    liEl.append(a, btn);
-    postsUl.appendChild(liEl);
+      liEl.append(a, btn);
+      postsUl.appendChild(liEl);
+    });
   });
 };
 
@@ -92,9 +92,7 @@ export default (link, watchedState, i18nextInstance) => {
     })
     .then((data) => {
       if (data.status.http_code === 404) throw new Error('noData');
-      const { feedTitle, feedDescription, posts } = parseData;
-      watchedState.feed.push({ feedTitle, feedDescription });
-      watchedState.posts.push({ posts });
+      watchedState.feed.push(parseData(data));
     })
     .catch((err) => {
       watchedState.form.error = i18nextInstance.t(`errors.${err.message}`);
