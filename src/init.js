@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import locale from '../locales/yupLocale.js';
 import view from './watchers.js';
 import resources from '../locales/resources.js';
-import getRss from './rss.js';
+import getRss, { parseData } from './rss.js';
 
 export default async () => {
   const elements = {
@@ -30,6 +30,7 @@ export default async () => {
     },
     urls: [],
     feed: [],
+    posts: [],
     language: 'ru',
   };
 
@@ -54,6 +55,19 @@ export default async () => {
     const value = formData.get(input).trim();
     state.form.value = value;
   });
+  const checkUpdate = (urls) => {
+    urls.forEach((url) => {
+      fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
+        .then((response) => {
+          if (response.ok) return response.json();
+        })
+        .then((data) => {
+          const { itemsData } = parseData(data);
+          const newPosts = itemsData.filter((post) => !state.posts.includes(post));
+          watchedState.posts = newPosts;
+        });
+    });
+  };
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -71,6 +85,7 @@ export default async () => {
       .catch((err) => {
         const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
         watchedState.form.error = messages;
+        setTimeout(checkUpdate(state.urls), 5000);
       });
   });
 };

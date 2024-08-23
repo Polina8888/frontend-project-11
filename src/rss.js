@@ -1,14 +1,15 @@
-const parseData = (data) => {
+export const parseData = (data) => {
   const parser = new DOMParser();
   const parsedData = parser.parseFromString(data.contents, 'application/xml');
   const feedDescription = parsedData.querySelector('description').textContent;
   const feedTitle = parsedData.querySelector('title').textContent;
   const items = parsedData.querySelectorAll('item');
   const itemsData = Array.from(items).map((item) => ({
-    liTitle: item.querySelector('title').textContent,
-    liDescription: item.querySelector('description').textContent,
-    liLink: item.querySelector('link').textContent,
+    postTitle: item.querySelector('title').textContent,
+    postDescription: item.querySelector('description').textContent,
+    postLink: item.querySelector('link').textContent,
   }));
+
   return { feedTitle, feedDescription, itemsData };
 };
 
@@ -25,7 +26,7 @@ const createCard = (i18nextInstance, type) => {
   return card;
 };
 
-export const renderFeed = (watchedState, i18nextInstance, elements) => {
+export const renderFeeds = (watchedState, i18nextInstance, elements) => {
   elements.posts.innerHTML = '';
   elements.feeds.innerHTML = '';
   const postsCard = createCard(i18nextInstance, 'posts');
@@ -49,17 +50,22 @@ export const renderFeed = (watchedState, i18nextInstance, elements) => {
     feedsLi.append(feedsH3, feedsP);
     feedsUl.append(feedsLi);
 
-    itemsData.forEach(({ liTitle, liDescription, liLink }) => {
+    itemsData.concat(watchedState.posts);
+    itemsData.forEach((post) => {
+      watchedState.posts.push(post);
+
+      const { postTitle, postDescription, postLink } = post;
+
       const liEl = document.createElement('li');
       liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
       const a = document.createElement('a');
       a.classList.add('fw-bold');
-      a.setAttribute('href', liLink);
+      a.setAttribute('href', postLink);
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'nooper noreferrer');
       a.dataset.id = '16';
-      a.textContent = liTitle;
+      a.textContent = postTitle;
 
       const btn = document.createElement('button');
       btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
