@@ -1,12 +1,3 @@
-// import i18next from 'i18next';
-// import resources from '../locales/resources.js';
-
-// const i18nextInstance = i18next.createInstance();
-// i18nextInstance.init({
-//   lng: watchedState.language,
-//   resources,
-// });
-
 const parseData = (data) => {
   const parser = new DOMParser();
   const parsedData = parser.parseFromString(data.contents, 'application/xml');
@@ -34,7 +25,7 @@ const createCard = (i18nextInstance, type) => {
   return card;
 };
 
-export const renderFeeds = (watchedState, i18nextInstance, elements) => {
+export const renderFeed = (watchedState, i18nextInstance, elements) => {
   elements.posts.innerHTML = '';
   elements.feeds.innerHTML = '';
   const postsCard = createCard(i18nextInstance, 'posts');
@@ -92,7 +83,7 @@ export default (link, watchedState, i18nextInstance) => {
     })
     .then((data) => {
       if (data.status.http_code === 404) throw new Error('noData');
-      watchedState.feed.push(parseData(data));
+      watchedState.feed.unshift(parseData(data));
     })
     .catch((err) => {
       watchedState.form.error = i18nextInstance.t(`errors.${err.message}`);

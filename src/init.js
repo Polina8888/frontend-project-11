@@ -66,7 +66,7 @@ export default async () => {
 
         watchedState.form.error = '';
         watchedState.urls.push(url);
-        getRss(state.urls[0], watchedState, i18nextInstance);
+        getRss(state.urls[state.urls.length - 1], watchedState, i18nextInstance);
       })
       .catch((err) => {
         const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
