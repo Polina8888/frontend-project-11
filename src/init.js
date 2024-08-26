@@ -29,7 +29,7 @@ export default async () => {
       error: '',
     },
     urls: [],
-    feed: [],
+    feeds: [],
     posts: [],
     language: 'ru',
   };
@@ -55,18 +55,21 @@ export default async () => {
     const value = formData.get(input).trim();
     state.form.value = value;
   });
+
   const checkUpdate = (urls) => {
     urls.forEach((url) => {
-      fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
-        .then((response) => {
-          if (response.ok) return response.json();
-        })
+      fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
+        .then((response) => response.json())
         .then((data) => {
-          const { itemsData } = parseData(data);
-          const newPosts = itemsData.filter((post) => !state.posts.includes(post));
-          watchedState.posts = newPosts;
+          const { posts } = parseData(data);
+          const postTitles = state.posts.map(({ postTitle }) => postTitle);
+          const newPosts = posts.filter(({ postTitle }) => !postTitles.includes(postTitle));
+          const newStatePosts = newPosts.concat(state.posts);
+          watchedState.posts = newStatePosts;
+          console.log(newPosts);
         });
     });
+    setTimeout(() => checkUpdate(urls), 5000);
   };
 
   elements.form.addEventListener('submit', (e) => {
@@ -81,11 +84,14 @@ export default async () => {
         watchedState.form.error = '';
         watchedState.urls.push(url);
         getRss(state.urls[state.urls.length - 1], watchedState, i18nextInstance);
+
+        checkUpdate(state.urls);
       })
       .catch((err) => {
-        const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
-        watchedState.form.error = messages;
-        setTimeout(checkUpdate(state.urls), 5000);
+        if (err.errors) {
+          const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
+          watchedState.form.error = messages;
+        }
       });
   });
 };

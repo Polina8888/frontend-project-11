@@ -1,5 +1,5 @@
 import onChange from 'on-change';
-import { renderFeeds } from './rss.js';
+import { renderFeeds, renderPosts } from './rss.js';
 
 export default (state, elements, i18nextInstance) => {
   const watchedState = onChange(state, (path) => {
@@ -15,9 +15,10 @@ export default (state, elements, i18nextInstance) => {
         elements.feedback.classList.add('text-success');
         elements.feedback.classList.remove('text-danger');
       }
-    } else if (path === 'feed') {
+    } else if (path === 'feeds' || path === 'posts') {
       renderFeeds(watchedState, i18nextInstance, elements);
-      console.log(watchedState.posts);
+      renderPosts(watchedState, i18nextInstance, elements);
+      // console.log(watchedState.posts);
     }
   });
 
