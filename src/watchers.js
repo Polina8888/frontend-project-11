@@ -20,7 +20,7 @@ export default (state, elements, i18nextInstance) => {
       renderFeeds(watchedState, i18nextInstance, elements);
       renderPosts(watchedState, i18nextInstance, elements);
       // console.log(watchedState.posts);
-    } else if (path === 'uiState.posts') {
+    } else if (path === 'uiState.visitedPosts') {
       markIfVisited(watchedState);
       renderModal(watchedState);
     }

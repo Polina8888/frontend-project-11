@@ -33,7 +33,7 @@ export default async () => {
     posts: [],
     language: 'ru',
     uiState: {
-      posts: [],
+      visitedPosts: [],
       currentPost: {},
     },
   };

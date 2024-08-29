@@ -50,8 +50,7 @@ export const renderPosts = (watchedState, i18nextInstance, elements) => {
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
     const a = document.createElement('a');
-    const visitedPost = watchedState.uiState.posts.find(({ id }) => id === postId);
-    if (!visitedPost || visitedPost.postState !== 'visited') {
+    if (!watchedState.uiState.visitedPosts.includes(postId)) {
       a.classList.add('fw-bold');
     }
     a.setAttribute('href', postLink);
@@ -72,25 +71,14 @@ export const renderPosts = (watchedState, i18nextInstance, elements) => {
     postsUl.appendChild(liEl);
 
     const clickFn = () => {
-      if (watchedState.uiState.posts.length) {
-        const visitedPost = watchedState.uiState.posts.find(({ id }) => id === postId);
-        if (visitedPost) {
-          if (visitedPost.postState === 'visited') {
-            visitedPost.postState = 'notVisisted';
-          } else {
-            visitedPost.postState = 'visited';
-          }
-          markIfVisited(watchedState);
-          console.log(watchedState.uiState.posts);
-        } else {
-          watchedState.uiState.posts.push({ id: postId, postState: 'visited' });
+      if (watchedState.uiState.visitedPosts.length) {
+        if (!watchedState.uiState.visitedPosts.includes(postId)) {
+          watchedState.uiState.visitedPosts.push(postId);
           watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
-          console.log(watchedState.uiState.posts);
         }
       } else {
-        watchedState.uiState.posts.push({ id: postId, postState: 'visited' });
+        watchedState.uiState.visitedPosts.push(postId);
         watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
-        console.log(watchedState.uiState.posts);
       }
     };
 
