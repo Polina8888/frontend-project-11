@@ -1,14 +1,22 @@
+import { markIfVisited } from './modal.js';
+
 export const parseData = (data) => {
   const parser = new DOMParser();
   const parsedData = parser.parseFromString(data.contents, 'application/xml');
   const feedDescription = parsedData.querySelector('description').textContent;
   const feedTitle = parsedData.querySelector('title').textContent;
   const items = parsedData.querySelectorAll('item');
-  const posts = Array.from(items).map((post) => ({
-    postTitle: post.querySelector('title').textContent,
-    postDescription: post.querySelector('description').textContent,
-    postLink: post.querySelector('link').textContent,
-  }));
+  const posts = Array.from(items).map((post) => {
+    const generateUniqueId = () => `id_${Math.random().toString(36).slice(2, 11)}`;
+    const uniqueId = generateUniqueId();
+
+    return {
+      postTitle: post.querySelector('title').textContent,
+      postDescription: post.querySelector('description').textContent,
+      postLink: post.querySelector('link').textContent,
+      postId: uniqueId,
+    };
+  });
 
   return { feedTitle, feedDescription, posts };
 };
@@ -34,29 +42,61 @@ export const renderPosts = (watchedState, i18nextInstance, elements) => {
   elements.posts.append(postsCard, postsUl);
 
   watchedState.posts.forEach((post) => {
-    const { postTitle, postDescription, postLink } = post;
+    const {
+      postTitle, postDescription, postLink, postId,
+    } = post;
 
     const liEl = document.createElement('li');
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
     const a = document.createElement('a');
-    a.classList.add('fw-bold');
+    const visitedPost = watchedState.uiState.posts.find(({ id }) => id === postId);
+    if (!visitedPost || visitedPost.postState !== 'visited') {
+      a.classList.add('fw-bold');
+    }
     a.setAttribute('href', postLink);
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'nooper noreferrer');
-    a.dataset.id = '16';
+    a.dataset.id = postId.toString();
     a.textContent = postTitle;
 
     const btn = document.createElement('button');
     btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     btn.setAttribute('type', 'button');
-    btn.dataset.id = '16';
+    btn.dataset.id = postId.toString();
     btn.dataset.bsToggle = 'modal';
     btn.dataset.bsTarget = '#modal';
     btn.textContent = i18nextInstance.t('preview');
 
     liEl.append(a, btn);
     postsUl.appendChild(liEl);
+
+    const clickFn = () => {
+      if (watchedState.uiState.posts.length) {
+        const visitedPost = watchedState.uiState.posts.find(({ id }) => id === postId);
+        if (visitedPost) {
+          if (visitedPost.postState === 'visited') {
+            visitedPost.postState = 'notVisisted';
+          } else {
+            visitedPost.postState = 'visited';
+          }
+          markIfVisited(watchedState);
+          console.log(watchedState.uiState.posts);
+        } else {
+          watchedState.uiState.posts.push({ id: postId, postState: 'visited' });
+          watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+          console.log(watchedState.uiState.posts);
+        }
+      } else {
+        watchedState.uiState.posts.push({ id: postId, postState: 'visited' });
+        watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+        console.log(watchedState.uiState.posts);
+      }
+    };
+
+    a.addEventListener('click', () => clickFn());
+
+    btn.addEventListener('click', () => clickFn());
   });
 };
 

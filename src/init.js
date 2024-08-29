@@ -26,12 +26,16 @@ export default async () => {
   const state = {
     form: {
       value: '',
-      error: '',
+      error: 'error',
     },
     urls: [],
     feeds: [],
     posts: [],
     language: 'ru',
+    uiState: {
+      posts: [],
+      currentPost: {},
+    },
   };
 
   yup.setLocale(locale);
@@ -66,7 +70,6 @@ export default async () => {
           const newPosts = posts.filter(({ postTitle }) => !postTitles.includes(postTitle));
           const newStatePosts = newPosts.concat(state.posts);
           watchedState.posts = newStatePosts;
-          console.log(newPosts);
         });
     });
     setTimeout(() => checkUpdate(urls), 5000);
@@ -90,7 +93,7 @@ export default async () => {
       .catch((err) => {
         if (err.errors) {
           const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
-          watchedState.form.error = messages;
+          [watchedState.form.error] = messages;
         }
       });
   });

@@ -1,5 +1,6 @@
 import onChange from 'on-change';
 import { renderFeeds, renderPosts } from './rss.js';
+import { markIfVisited, renderModal } from './modal.js';
 
 export default (state, elements, i18nextInstance) => {
   const watchedState = onChange(state, (path) => {
@@ -10,7 +11,7 @@ export default (state, elements, i18nextInstance) => {
         elements.feedback.classList.remove('text-success');
         elements.feedback.classList.add('text-danger');
       } else {
-        elements.feedback.textContent = state.form.error;
+        elements.feedback.textContent = i18nextInstance.t('successfullyLoaded');
         elements.input.classList.remove('is-invalid');
         elements.feedback.classList.add('text-success');
         elements.feedback.classList.remove('text-danger');
@@ -19,6 +20,9 @@ export default (state, elements, i18nextInstance) => {
       renderFeeds(watchedState, i18nextInstance, elements);
       renderPosts(watchedState, i18nextInstance, elements);
       // console.log(watchedState.posts);
+    } else if (path === 'uiState.posts') {
+      markIfVisited(watchedState);
+      renderModal(watchedState);
     }
   });
 
