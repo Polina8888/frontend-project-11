@@ -1,4 +1,4 @@
-import { markIfVisited } from './modal.js';
+import { renderModal } from './modal.js';
 
 export const parseData = (data) => {
   const parser = new DOMParser();
@@ -73,12 +73,15 @@ export const renderPosts = (watchedState, i18nextInstance, elements) => {
     const clickFn = () => {
       if (watchedState.uiState.visitedPosts.length) {
         if (!watchedState.uiState.visitedPosts.includes(postId)) {
-          watchedState.uiState.visitedPosts.push(postId);
           watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+          watchedState.uiState.visitedPosts.push(postId);
+        } else {
+          watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+          renderModal(watchedState);
         }
       } else {
-        watchedState.uiState.visitedPosts.push(postId);
         watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+        watchedState.uiState.visitedPosts.push(postId);
       }
     };
 
