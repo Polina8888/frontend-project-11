@@ -5,7 +5,7 @@ import view from './watchers.js';
 import resources from '../locales/resources.js';
 import getRss, { parseData } from './rss.js';
 
-export default async () => {
+export default () => {
   const elements = {
     form: document.querySelector('form'),
     input: document.querySelector('#url-input'),
@@ -87,7 +87,6 @@ export default async () => {
         watchedState.form.error = '';
         watchedState.urls.push(url);
         getRss(state.urls[state.urls.length - 1], watchedState, i18nextInstance);
-
         checkUpdate(state.urls);
       })
       .catch((err) => {

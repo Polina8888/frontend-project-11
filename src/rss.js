@@ -34,6 +34,26 @@ const createCard = (i18nextInstance, type) => {
   return card;
 };
 
+const clickModalFn = (watchedState, id) => {
+  const post = watchedState.posts.find((statePost) => statePost.postId === id);
+  const {
+    postTitle, postDescription, postLink, postId,
+  } = post;
+
+  if (watchedState.uiState.visitedPosts.length) {
+    if (!watchedState.uiState.visitedPosts.includes(postId)) {
+      watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+      watchedState.uiState.visitedPosts.push(postId);
+    } else {
+      watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+      renderModal(watchedState);
+    }
+  } else {
+    watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
+    watchedState.uiState.visitedPosts.push(postId);
+  }
+};
+
 export const renderPosts = (watchedState, i18nextInstance, elements) => {
   elements.posts.innerHTML = '';
   const postsCard = createCard(i18nextInstance, 'posts');
@@ -42,9 +62,7 @@ export const renderPosts = (watchedState, i18nextInstance, elements) => {
   elements.posts.append(postsCard, postsUl);
 
   watchedState.posts.forEach((post) => {
-    const {
-      postTitle, postDescription, postLink, postId,
-    } = post;
+    const { postTitle, postLink, postId } = post;
 
     const liEl = document.createElement('li');
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
@@ -70,24 +88,9 @@ export const renderPosts = (watchedState, i18nextInstance, elements) => {
     liEl.append(a, btn);
     postsUl.appendChild(liEl);
 
-    const clickFn = () => {
-      if (watchedState.uiState.visitedPosts.length) {
-        if (!watchedState.uiState.visitedPosts.includes(postId)) {
-          watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
-          watchedState.uiState.visitedPosts.push(postId);
-        } else {
-          watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
-          renderModal(watchedState);
-        }
-      } else {
-        watchedState.uiState.currentPost = { postTitle, postDescription, postLink };
-        watchedState.uiState.visitedPosts.push(postId);
-      }
-    };
+    a.addEventListener('click', () => clickModalFn(watchedState, postId));
 
-    a.addEventListener('click', () => clickFn());
-
-    btn.addEventListener('click', () => clickFn());
+    btn.addEventListener('click', () => clickModalFn(watchedState, postId));
   });
 };
 
