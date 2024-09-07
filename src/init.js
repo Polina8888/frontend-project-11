@@ -70,7 +70,8 @@ export default () => {
           const newPosts = posts.filter(({ postTitle }) => !postTitles.includes(postTitle));
           const newStatePosts = newPosts.concat(state.posts);
           watchedState.posts = newStatePosts;
-        });
+        })
+        .catch((e) => console.log(e));
     });
     setTimeout(() => checkUpdate(urls), 5000);
   };
