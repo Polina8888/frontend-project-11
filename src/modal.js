@@ -10,12 +10,16 @@ export const renderModal = (watchedState) => {
   modal.classList.add('show');
   modal.style.display = 'block';
   document.body.classList.add('modal-open');
+  document.body.style.overflow = 'hidden';
+  document.body.style.paddingRight = '0px';
 
   window.addEventListener('click', (e) => {
     if (e.target.dataset.bsToggle !== 'modal') {
       modal.classList.remove('show');
       modal.style.display = 'none';
       document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     }
   });
 
@@ -23,6 +27,8 @@ export const renderModal = (watchedState) => {
     modal.classList.remove('show');
     modal.style.display = 'none';
     document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
   });
 };
 
