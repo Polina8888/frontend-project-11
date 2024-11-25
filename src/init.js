@@ -1,9 +1,10 @@
 import * as yup from 'yup';
 import i18next from 'i18next';
 import locale from '../locales/yupLocale.js';
-import view from './watchers.js';
+import view from '../view/watchers.js';
 import resources from '../locales/resources.js';
-import getRss, { parseData } from './rss.js';
+import getRss from './rss.js';
+import checkUpdate from '../utils/updateRss.js';
 
 export default () => {
   const elements = {
@@ -47,7 +48,8 @@ export default () => {
     resources,
   });
 
-  Object.entries(elements.textNodes).forEach(([key, value]) => {
+  Object.entries(elements.textNodes).forEach((node) => {
+    const [key, value] = node;
     value.textContent = i18nextInstance.t(key);
   });
 
@@ -60,22 +62,6 @@ export default () => {
     state.form.value = value;
   });
 
-  const checkUpdate = (urls) => {
-    urls.forEach((url) => {
-      fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
-        .then((response) => response.json())
-        .then((data) => {
-          const { posts } = parseData(data);
-          const postTitles = state.posts.map(({ postTitle }) => postTitle);
-          const newPosts = posts.filter(({ postTitle }) => !postTitles.includes(postTitle));
-          const newStatePosts = newPosts.concat(state.posts);
-          watchedState.posts = newStatePosts;
-        })
-        .catch((e) => console.log(e));
-    });
-    setTimeout(() => checkUpdate(urls), 5000);
-  };
-
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -87,7 +73,7 @@ export default () => {
 
         watchedState.urls.push(url);
         getRss(state.urls[state.urls.length - 1], watchedState, i18nextInstance);
-        checkUpdate(state.urls);
+        checkUpdate(state.urls, watchedState);
       })
       .catch((err) => {
         if (err.errors) {

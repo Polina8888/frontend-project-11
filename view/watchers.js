@@ -1,6 +1,7 @@
 import onChange from 'on-change';
-import { renderFeeds, renderPosts } from './rss.js';
 import { markIfVisited, renderModal } from './modal.js';
+import renderFeeds from './renderFeeds.js';
+import renderPosts from './renderPosts.js';
 
 export default (state, elements, i18nextInstance) => {
   const watchedState = onChange(state, (path) => {
