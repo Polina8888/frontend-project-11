@@ -9,6 +9,10 @@ export const renderModal = (watchedState) => {
   modalBody.textContent = postDescription;
   document.querySelector('.full-article').setAttribute('href', postLink);
 
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.classList.add('modal-backdrop', 'fade', 'show');
+  document.body.appendChild(modalBackdrop);
+
   const modal = document.getElementById('modal');
   modal.classList.add('show');
   modal.style.display = 'block';
@@ -16,22 +20,34 @@ export const renderModal = (watchedState) => {
   document.body.style.overflow = 'hidden';
   document.body.style.paddingRight = '0px';
 
-  window.addEventListener('click', (e) => {
-    if (e.target.dataset.bsToggle !== 'modal') {
-      modal.classList.remove('show');
-      modal.style.display = 'none';
-      document.body.classList.remove('modal-open');
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    }
-  });
-
-  document.querySelector('.btn-close').addEventListener('click', () => {
+  const closeModal = () => {
     modal.classList.remove('show');
     modal.style.display = 'none';
     document.body.classList.remove('modal-open');
     document.body.style.overflow = '';
     document.body.style.paddingRight = '';
+
+    modalBackdrop.remove();
+  };
+
+  const checkIfModal = (el) => {
+    const modalDialog = document.querySelector('.modal-dialog');
+    if (el === modalDialog || modalDialog.contains(el)) {
+      return true;
+    }
+    return false;
+  };
+
+  window.addEventListener('click', (e) => {
+    if (e.target.dataset.bsToggle !== 'modal') {
+      if (e.target.dataset.bsDismiss === 'modal' || !checkIfModal(e.target)) {
+        closeModal();
+      }
+    }
+  });
+
+  document.querySelector('.btn-close').addEventListener('click', () => {
+    closeModal();
   });
 };
 
