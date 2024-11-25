@@ -35,7 +35,7 @@ export default () => {
     language: 'ru',
     uiState: {
       visitedPosts: [],
-      currentPost: {},
+      currentPost: '',
     },
   };
 

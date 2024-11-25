@@ -1,5 +1,8 @@
 export const renderModal = (watchedState) => {
-  const { postTitle, postDescription, postLink } = watchedState.uiState.currentPost;
+  const currentId = watchedState.uiState.currentPostId;
+  const currentPost = watchedState.posts.find(({ postId }) => postId === currentId);
+  const { postTitle, postDescription, postLink } = currentPost;
+
   const modalTitle = document.querySelector('.modal-title');
   modalTitle.textContent = postTitle;
   const modalBody = document.querySelector('.modal-body');
