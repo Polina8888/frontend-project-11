@@ -2,7 +2,8 @@ import modalController from '../src/modalController.js';
 import createCard from './createCard.js';
 
 export default (watchedState, i18nextInstance, elements) => {
-  elements.posts.innerHTML = '';
+  const { posts } = elements;
+  posts.innerHTML = '';
   const postsCard = createCard(i18nextInstance, 'posts');
   const postsUl = document.createElement('ul');
   postsUl.classList.add('list-group', 'border-0', 'rounded-0');

@@ -1,7 +1,8 @@
 import createCard from './createCard.js';
 
 export default (watchedState, i18nextInstance, elements) => {
-  elements.feeds.innerHTML = '';
+  const { feeds } = elements;
+  feeds.innerHTML = '';
   const feedsCard = createCard(i18nextInstance, 'feeds');
   const feedsUl = document.createElement('ul');
   feedsUl.classList.add('list-group', 'border-0', 'rounded-0');

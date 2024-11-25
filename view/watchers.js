@@ -4,15 +4,16 @@ import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 
 export default (state, elements, i18nextInstance) => {
+  const { feedback } = elements;
   const watchedState = onChange(state, (path) => {
     if (path === 'form.error') {
       if (state.form.error.length) {
         elements.input.classList.add('is-invalid');
-        elements.feedback.textContent = state.form.error;
+        feedback.textContent = state.form.error;
         elements.feedback.classList.remove('text-success');
         elements.feedback.classList.add('text-danger');
       } else {
-        elements.feedback.textContent = i18nextInstance.t('successfullyLoaded');
+        feedback.textContent = i18nextInstance.t('successfullyLoaded');
         elements.input.classList.remove('is-invalid');
         elements.feedback.classList.add('text-success');
         elements.feedback.classList.remove('text-danger');
