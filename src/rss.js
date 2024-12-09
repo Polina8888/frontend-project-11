@@ -37,6 +37,7 @@ export default (link, watchedState, i18nextInstance) => {
       watchedState.form.error = '';
     })
     .catch((err) => {
+      watchedState.urls.pop();
       watchedState.form.error = i18nextInstance.t(`errors.${err.message}`);
     });
 };
