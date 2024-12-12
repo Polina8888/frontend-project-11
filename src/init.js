@@ -71,8 +71,7 @@ export default () => {
         elements.form.reset();
         elements.input.focus();
 
-        watchedState.urls.push(url);
-        getRss(state.urls[state.urls.length - 1], watchedState, i18nextInstance);
+        getRss(url, watchedState, i18nextInstance);
         checkUpdate(state.urls, watchedState);
       })
       .catch((err) => {

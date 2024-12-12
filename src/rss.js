@@ -24,8 +24,8 @@ export const parseData = (data) => {
   }
 };
 
-export default (link, watchedState, i18nextInstance) => {
-  fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
+export default (url, watchedState, i18nextInstance) => {
+  fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
     .then((response) => {
       if (response.ok) return response.json();
       throw new Error('Failed to fetch');
@@ -35,9 +35,9 @@ export default (link, watchedState, i18nextInstance) => {
       watchedState.posts = posts.concat(watchedState.posts);
       watchedState.feeds.unshift({ feedTitle, feedDescription });
       watchedState.form.error = '';
+      watchedState.urls.push(url);
     })
     .catch((err) => {
-      watchedState.urls.pop();
       watchedState.form.error = i18nextInstance.t(`errors.${err.message}`);
     });
 };
