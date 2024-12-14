@@ -38,6 +38,7 @@ export default (url, watchedState, i18nextInstance) => {
       watchedState.urls.push(url);
     })
     .catch((err) => {
+      watchedState.isAwaiting = false;
       watchedState.form.error = i18nextInstance.t(`errors.${err.message}`);
     });
 };

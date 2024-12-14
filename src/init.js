@@ -32,6 +32,7 @@ export default () => {
     urls: [],
     feeds: [],
     posts: [],
+    isAwaiting: false,
     language: 'ru',
     uiState: {
       visitedPosts: [],
@@ -40,7 +41,6 @@ export default () => {
   };
 
   yup.setLocale(locale);
-  const schema = yup.string().url();
 
   const i18nextInstance = i18next.createInstance();
   i18nextInstance.init({
@@ -65,18 +65,19 @@ export default () => {
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    schema.notOneOf(state.urls)
+    watchedState.isAwaiting = true;
+
+    const schema = yup.string().url().notOneOf(state.urls);
+    schema
       .validate(state.form.value, { abortEarly: false })
       .then((url) => {
-        elements.form.reset();
-        elements.input.focus();
-
         getRss(url, watchedState, i18nextInstance);
         checkUpdate(state.urls, watchedState);
       })
       .catch((err) => {
         if (err.errors) {
           const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
+          watchedState.isAwaiting = false;
           [watchedState.form.error] = messages;
         }
       });
