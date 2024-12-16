@@ -4,7 +4,7 @@ export default {
     subheading: "Start reading RSS today! It's simple and lovely.",
     langBtn: 'рус',
     RSSLink: 'RSS link',
-    example: 'An example: https://lorem-rss.hexlet.app/feed',
+    example: 'An example: https://lorem-rss.hexlet.app/feed?unit=second',
     successfullyLoaded: 'RSS has been loaded',
     addBtn: 'Add',
     readAllBtn: 'Read more',

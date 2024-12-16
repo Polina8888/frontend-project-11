@@ -5,7 +5,7 @@ export default {
     langBtn: 'en',
     RSSLink: 'Ссылка RSS',
     add: 'Добавить',
-    example: 'Пример: https://lorem-rss.hexlet.app/feed',
+    example: 'Пример: https://lorem-rss.hexlet.app/feed?unit=second',
     addBtn: 'Добавить',
     successfullyLoaded: 'RSS был успешно загружен',
     readAllBtn: 'Читать полностью',
