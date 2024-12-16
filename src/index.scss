@@ -1,5 +1,10 @@
 @import '~bootstrap';
 
+.text-muted {
+  --bs-text-opacity: 1;
+  color: #6c757d !important;
+}
+
 .modal-header {
   align-items: flex-start;
 }
