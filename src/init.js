@@ -34,7 +34,7 @@ export default () => {
     feeds: [],
     posts: [],
     isAwaiting: false,
-    language: 'en',
+    language: 'ru',
     uiState: {
       visitedPosts: [],
       currentPostId: '',
