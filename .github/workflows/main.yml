@@ -1,4 +1,4 @@
-name: my-ci/cd
+name: run linter
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       - name: Install Dependencies
         run: |
           make install
-
-      - name: Build Project
+      
+      - name: Run Linter
         run: |
-          make build
+          make lint
