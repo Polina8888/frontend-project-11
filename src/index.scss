@@ -1,12 +1,5 @@
 @import '~bootstrap';
 
-.text-muted {
-  --bs-text-opacity: 1;
-  color: #6c757d !important;
-}
-
-.btn-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.modal-header {
+  align-items: flex-start;
 }
