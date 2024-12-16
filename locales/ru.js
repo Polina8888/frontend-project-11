@@ -2,6 +2,7 @@ export default {
   translation: {
     heading: 'RSS агрегатор',
     subheading: 'Начните читать RSS сегодня! Это легко, это красиво.',
+    langBtn: 'en',
     RSSLink: 'Ссылка RSS',
     add: 'Добавить',
     example: 'Пример: https://lorem-rss.hexlet.app/feed',

@@ -21,6 +21,7 @@ export default () => {
       closeModalBtn: document.querySelector('button[class="btn btn-secondary"]'),
       addBtn: document.querySelector('button[class="h-100 btn btn-lg btn-primary px-sm-5"]'),
       example: document.querySelector('p[class="mt-2 mb-0 text-muted"]'),
+      langBtn: document.querySelector('#lang-btn'),
     },
   };
 
@@ -48,9 +49,16 @@ export default () => {
     resources,
   });
 
-  Object.entries(elements.textNodes).forEach((node) => {
-    const [key, value] = node;
-    value.textContent = i18nextInstance.t(key);
+  const setTexts = () => {
+    Object.entries(elements.textNodes).forEach((node) => {
+      const [key, value] = node;
+      value.textContent = i18nextInstance.t(key);
+    });
+  };
+
+  elements.textNodes.langBtn.addEventListener('click', () => {
+    state.language = state.language === 'ru' ? 'en' : 'ru';
+    i18nextInstance.changeLanguage(state.language).then(setTexts);
   });
 
   const watchedState = view(state, elements, i18nextInstance);
