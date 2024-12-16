@@ -33,10 +33,10 @@ export default () => {
     feeds: [],
     posts: [],
     isAwaiting: false,
-    language: 'ru',
+    language: 'en',
     uiState: {
       visitedPosts: [],
-      currentPost: '',
+      currentPostId: '',
     },
   };
 
@@ -70,9 +70,15 @@ export default () => {
     const schema = yup.string().url().notOneOf(state.urls);
     schema
       .validate(state.form.value, { abortEarly: false })
-      .then((url) => {
-        getRss(url, watchedState, i18nextInstance);
-        checkUpdate(state.urls, watchedState);
+      .then(async (url) => {
+        try {
+          await getRss(url, watchedState);
+          checkUpdate(state.urls, watchedState);
+          watchedState.form.error = '';
+        } catch (error) {
+          watchedState.isAwaiting = false;
+          watchedState.form.error = i18nextInstance.t(`errors.${error.message}`);
+        }
       })
       .catch((err) => {
         if (err.errors) {

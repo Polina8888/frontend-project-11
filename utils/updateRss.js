@@ -8,8 +8,7 @@ const checkUpdate = async (urls, watchedState) => {
         const { posts } = parseData(data);
         const postTitles = watchedState.posts.map(({ postTitle }) => postTitle);
         const newPosts = posts.filter(({ postTitle }) => !postTitles.includes(postTitle));
-        const newStatePosts = newPosts.concat(watchedState.posts);
-        watchedState.posts = newStatePosts;
+        newPosts.forEach((post) => watchedState.posts.unshift(post));
       })
       .catch((e) => console.error(e));
   });
