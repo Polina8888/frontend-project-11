@@ -1,4 +1,3 @@
-import modalController from '../src/modalController.js';
 import createCard from './createCard.js';
 
 export default (watchedState, i18nextInstance, elements) => {
@@ -7,7 +6,7 @@ export default (watchedState, i18nextInstance, elements) => {
   const postsCard = createCard(i18nextInstance, 'posts');
   const postsUl = document.createElement('ul');
   postsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  elements.posts.append(postsCard, postsUl);
+  posts.append(postsCard, postsUl);
 
   watchedState.posts.forEach((post) => {
     const { postTitle, postLink, postId } = post;
@@ -35,9 +34,5 @@ export default (watchedState, i18nextInstance, elements) => {
 
     liEl.append(a, btn);
     postsUl.appendChild(liEl);
-
-    a.addEventListener('click', () => modalController(watchedState, postId));
-
-    btn.addEventListener('click', () => modalController(watchedState, postId));
   });
 };

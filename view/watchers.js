@@ -45,7 +45,11 @@ export default (state, elements, i18nextInstance) => {
         break;
       case 'uiState.visitedPosts':
         markIfVisited(watchedState);
-        renderModal(watchedState);
+        break;
+      case 'uiState.currentPostId':
+        if (watchedState.uiState.currentPostId !== '') {
+          renderModal(watchedState);
+        }
         break;
       case 'isAwaiting':
         if (watchedState.form.error.length && watchedState.isAwaiting === false) {

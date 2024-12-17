@@ -86,7 +86,6 @@ export default () => {
           watchedState.form.error = '';
           state.urls.push(url);
         } catch (error) {
-          console.error(error.message)
           watchedState.isAwaiting = false;
           watchedState.form.error = error.message;
         }
@@ -98,5 +97,21 @@ export default () => {
           [watchedState.form.error] = messages;
         }
       });
+  });
+
+  const modalController = (id, targetName) => {
+    const post = watchedState.posts.find((statePost) => statePost.postId === id);
+    const { postId } = post;
+
+    if (targetName === 'BUTTON') {
+      watchedState.uiState.currentPostId = id;
+    }
+    if (!watchedState.uiState.visitedPosts.includes(postId)) {
+      watchedState.uiState.visitedPosts.push(postId);
+    }
+  };
+  elements.posts.addEventListener('click', (e) => {
+    modalController(e.target.dataset.id, e.target.tagName);
+    watchedState.uiState.currentPostId = '';
   });
 };
