@@ -56,12 +56,13 @@ export default () => {
     });
   };
 
-  elements.textNodes.langBtn.addEventListener('click', () => {
-    state.language = state.language === 'ru' ? 'en' : 'ru';
-    i18nextInstance.changeLanguage(state.language).then(setTexts);
-  });
-
   const watchedState = view(state, elements, i18nextInstance);
+
+  elements.textNodes.langBtn.addEventListener('click', () => {
+    const language = watchedState.language === 'ru' ? 'en' : 'ru';
+    i18nextInstance.changeLanguage(language).then(setTexts);
+    watchedState.language = language;
+  });
 
   elements.form.addEventListener('input', (e) => {
     const formData = new FormData(elements.form);
@@ -83,14 +84,16 @@ export default () => {
           await getRss(url, watchedState);
           checkUpdate(state.urls, watchedState);
           watchedState.form.error = '';
+          state.urls.push(url);
         } catch (error) {
+          console.error(error.message)
           watchedState.isAwaiting = false;
-          watchedState.form.error = i18nextInstance.t(`errors.${error.message}`);
+          watchedState.form.error = error.message;
         }
       })
       .catch((err) => {
         if (err.errors) {
-          const messages = err.errors.map((error) => i18nextInstance.t(`errors.${error.key}`));
+          const messages = err.errors.map((error) => error.key);
           watchedState.isAwaiting = false;
           [watchedState.form.error] = messages;
         }
