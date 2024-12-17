@@ -11,7 +11,7 @@
 
 Feed aggregator, which collect RSS feeds and then watched for a new posts.
 
-### See how it works: [my RSS Reader](https://frontend-project-11-symecm2o2-polinas-projects-531df1c3.vercel.app/)
+### See how it works: [my RSS Reader](https://frontend-project-11-q6djnl4za-polinas-projects-531df1c3.vercel.app/)
 
 ### To run locally on your machine (make sure that you have node.js and npm installed):
 
