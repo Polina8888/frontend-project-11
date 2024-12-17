@@ -84,7 +84,7 @@ export default () => {
           await getRss(url, watchedState);
           checkUpdate(state.urls, watchedState);
           watchedState.form.error = '';
-          state.urls.push(url);
+          watchedState.urls.push(url);
         } catch (error) {
           watchedState.isAwaiting = false;
           watchedState.form.error = error.message;

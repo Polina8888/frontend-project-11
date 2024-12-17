@@ -36,6 +36,10 @@ export default (state, elements, i18nextInstance) => {
           elements.feedback.classList.remove('text-danger');
         }
         break;
+      case 'urls':
+        elements.form.reset();
+        elements.input.focus();
+        break;
       case 'feeds':
         renderFeeds(watchedState, i18nextInstance, elements);
         renderPosts(watchedState, i18nextInstance, elements);
