@@ -6,7 +6,7 @@ export default (watchedState, i18nextInstance, elements) => {
   const feedsCard = createCard(i18nextInstance, 'feeds');
   const feedsUl = document.createElement('ul');
   feedsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  elements.feeds.append(feedsCard, feedsUl);
+  feeds.append(feedsCard, feedsUl);
 
   watchedState.feeds.forEach(({ feedTitle, feedDescription }) => {
     const feedsLi = document.createElement('li');

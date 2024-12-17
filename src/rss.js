@@ -36,7 +36,6 @@ export default async (url, watchedState) => {
 
     posts.forEach((post) => watchedState.posts.unshift((post)));
     watchedState.feeds.unshift({ feedTitle, feedDescription });
-    watchedState.urls.push(url);
   } catch (error) {
     throw new Error(error.message);
   }
