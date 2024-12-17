@@ -19,6 +19,7 @@ export default {
       alreadyExists: 'RSS уже существует',
       noData: 'Ресурс не содержит валидный RSS',
       'Failed to fetch': 'Ошибка сети',
+      error: '',
     },
   },
 };
